@@ -1,16 +1,9 @@
 import 'package:commmerce/dao/api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProductPage extends StatelessWidget {
-  final String title;
-  final String description;
-  final double price;
-  const ProductPage({
-    super.key,
-    this.title = '',
-    this.description = '',
-    this.price = 0.0,
-  });
+  const ProductPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +28,13 @@ class ProductPage extends StatelessWidget {
 
                 children: [
                   Text(
-                    title,
+                    'title',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 40.0,
                     ),
                   ),
-                  Text(
-                    description,
-                    style: TextStyle(fontSize: 20.0),
-                  ),
+                  Text('description', style: TextStyle(fontSize: 20.0)),
                 ],
               ),
             ),

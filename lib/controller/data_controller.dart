@@ -3,11 +3,25 @@ import 'package:commmerce/model/product.dart';
 import 'package:get/get.dart';
 
 class DataController extends GetxController {
-  RxList products = [].obs;
+  RxList<Product> products = <Product>[].obs;
+  RxBool isLoading = false.obs;
 
-  fetchData() async {
-    final Api api = Api();
-    Products? data = await api.getProducts();
-    products.value = data!.products;
+  @override
+  void onInit() {
+    super.onInit();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    isLoading(true);
+    try {
+      final Api api = Api();
+      Products? data = await api.getProducts();
+      products.value = data!.products;
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading(false);
+    }
   }
 }
