@@ -26,11 +26,14 @@ class MyListTile extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
                 ),
-                child: Image.network(
-                  productDetails.thumbnail,
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
+                child: Hero(
+                  tag: 'image${productDetails.id}',
+                  child: Image.network(
+                    productDetails.thumbnail,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Expanded(

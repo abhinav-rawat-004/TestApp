@@ -22,13 +22,7 @@ class MyHomePage extends GetView<DataController> {
             ? const Center(child: CircularProgressIndicator())
             : MyListView(productList: controller.products()),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //print(fetchedData?.products[0]);
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      
     );
   }
 }
