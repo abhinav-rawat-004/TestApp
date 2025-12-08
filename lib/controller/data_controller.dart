@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 class DataController extends GetxController {
   RxList<Product> products = <Product>[].obs;
   RxBool isLoading = false.obs;
+  RxInt currentScreenIndex = 0.obs;
 
   @override
   void onInit() {
@@ -24,4 +25,14 @@ class DataController extends GetxController {
       isLoading(false);
     }
   }
+
+  /* Test posting functionality
+  Future<void> postData() async {
+    try {
+      await api.postData();
+    } catch (error) {
+      print('Error : ${error}');
+    }
+  }
+*/
 }
