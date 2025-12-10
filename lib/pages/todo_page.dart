@@ -1,4 +1,3 @@
-
 import 'package:commmerce/controller/todo_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,17 +21,16 @@ class TodoPage extends GetView<TodoController> {
                     margin: EdgeInsets.all(8.0),
                     child: ListTile(
                       leading: Obx(
-                      () => Checkbox(
-                          value: controller.taskCompleted[index], 
+                        () => Checkbox(
+                          value: controller.todoItems[index].checked,
                           onChanged: (value) {
-                            controller.taskCompleted[index] = value ?? false;
+                            controller.todoItems[index].checked =
+                                value ?? false;
+                            controller.updateTodo(controller.todoItems[index]);
                           },
                         ),
                       ),
-                      title: Text(
-                        controller.todoItems[index],
-                        
-                      ),
+                      title: Text(controller.todoItems[index].task),
                       trailing: IconButton(
                         // DELETE TASK BUTTON
                         onPressed: () {

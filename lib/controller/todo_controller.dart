@@ -1,52 +1,51 @@
+import 'package:commmerce/dao/todo_dao.dart';
+import 'package:commmerce/model/todo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class TodoController extends GetxController {
-  RxList todoItems = [].obs;
-  RxList<bool> taskCompleted = <bool>[].obs;
-  // RxInt todoItemCount = 0.obs;
-  //RxInt deleteCount = 0.obs;
+  RxList<Todo> todoItems = <Todo>[].obs;
+  // RxList<bool> taskCompleted = <bool>[].obs;
+  final TodoDao dao = TodoDao();
 
   TextEditingController addTaskController = TextEditingController();
 
-  delete(int index) {
-    todoItems.removeAt(index);
-    taskCompleted.removeAt(index);
+  @override
+  void onInit() {
+    super.onInit();
+    fetchTodo();
   }
 
-  add() {
+  Future fetchTodo() async {
+    todoItems.value = await dao.getTodoList();
+  }
+
+  void delete(int index) async {
+    await dao.deleteTodo(todoItems[index]);
+    fetchTodo();
+    // todoItems.removeAt(index);
+    //taskCompleted.removeAt(index);
+  }
+
+  Future updateTodo(Todo todo) async {
+    await dao.updateTodo(todo);
+    fetchTodo();
+  }
+
+  Future add() async {
     if (addTaskController.text.isNotEmpty) {
-      todoItems.add(addTaskController.text);
-      taskCompleted.add(false);
+      //todoItems.add(addTaskController.text);
+      Todo todo = Todo(task: addTaskController.text, checked: false);
+      await dao.insertTodo(todo);
+      //taskCompleted.add(false);
       addTaskController.clear();
+      fetchTodo();
       //controller.todoItemCount.value++;
       Get.back();
     } else {
       Get.back();
     }
   }
-  // deleteTask(int index) {
-  //   if (deleteCount().isEqual(0)) {
-  //     todoItems().removeAt(index);
-  //   } else {
-  //     todoItems().removeAt(
-  //       index - deleteCount(),
-  //     );
-  //   }
-  //   deleteCount.value++;
-  //   todoItemCount.value--;
-  // }
 
-  // addTask() {
-  //     if (controller.addTaskController().text.isNotEmpty) {
-  //       controller.todoItems().add(
-  //         controller.addTaskController().text,
-  //       );
-  //       controller.addTaskController().clear();
-  //       controller.todoItemCount.value++;
-  //       Get.back();
-  //     } else {
-  //       Get.back();
-  //     }
-  //   }
+  void addTodo() {}
 }
