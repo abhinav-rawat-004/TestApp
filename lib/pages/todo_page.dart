@@ -20,6 +20,16 @@ class TodoPage extends GetView<TodoController> {
                   return Card(
                     margin: EdgeInsets.all(8.0),
                     child: ListTile(
+                      onTap: () {
+                        controller.addTaskController.text =
+                            controller.todoItems[index].task;
+                        dialogBox(
+                          controller.updateTodo,
+                          true,
+                          'Update',
+                          index: index,
+                        );
+                      },
                       leading: Obx(
                         () => Checkbox(
                           value: controller.todoItems[index].checked,
@@ -34,7 +44,41 @@ class TodoPage extends GetView<TodoController> {
                       trailing: IconButton(
                         // DELETE TASK BUTTON
                         onPressed: () {
-                          controller.delete(index);
+                          Get.defaultDialog(
+                            title: 'Confirm Delete',
+                            titleStyle: TextStyle(
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                            ),
+                            titlePadding: EdgeInsets.only(top: 20),
+                            middleText: 'Do you really want to delete this task?',
+                            barrierDismissible: false,
+                            cancel: MaterialButton(
+                              // CANCEL BUTTON
+                              onPressed: () {
+                                controller.addTaskController.clear();
+                                Get.back();
+                              },
+                              child: Text('cancel'),
+                            ),
+                            confirm: MaterialButton(
+                              onPressed: () {
+                                controller.delete(index);
+                                Get.back();
+                              },
+                              color: Colors.redAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusGeometry.circular(
+                                  6.0,
+                                ),
+                              ),
+                              child: Text(
+                                'Delete',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          );
                         },
                         icon: Icon(Icons.delete, color: Colors.red),
                       ),
@@ -46,45 +90,52 @@ class TodoPage extends GetView<TodoController> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.defaultDialog(
-            titlePadding: EdgeInsets.only(top: 20.0),
-            title: 'Add new task',
-            content: TextField(
-              controller: controller.addTaskController,
-              decoration: InputDecoration(
-                hint: Text('Enter Task'),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            confirm: MaterialButton(
-              // ADD TASK BUTTON
-              onPressed: () {
-                controller.add();
-              },
-              color: const Color.fromARGB(255, 188, 121, 200),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadiusGeometry.circular(6.0),
-              ),
-              child: Text('Add', style: TextStyle(color: Colors.white)),
-            ),
-            cancel: MaterialButton(
-              // CANCEL BUTTON
-              onPressed: () {
-                controller.addTaskController.clear();
-                Get.back();
-              },
-              child: Text(
-                'cancel',
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 188, 121, 200),
-                ),
-              ),
-            ),
-          );
-        },
+        onPressed: () => dialogBox(controller.add, false, 'Add'),
         tooltip: 'Add Task',
         child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  void dialogBox(Function function, bool update, String text, {int? index}) {
+    Get.defaultDialog(
+      titlePadding: EdgeInsets.only(top: 20.0),
+      title: '$text task',
+      barrierDismissible: false,
+      content: TextField(
+        controller: controller.addTaskController,
+        decoration: InputDecoration(
+          hint: Text('Enter Task'),
+          border: OutlineInputBorder(),
+        ),
+      ),
+      confirm: MaterialButton(
+        // ADD TASK BUTTON
+        onPressed: () {
+          if (update) {
+            controller.todoItems[index!].task =
+                controller.addTaskController.text;
+            controller.updateTodo(controller.todoItems[index]);
+          } else {
+            function();
+          }
+        },
+        color: const Color.fromARGB(255, 188, 121, 200),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(6.0),
+        ),
+        child: Text(text, style: TextStyle(color: Colors.white)),
+      ),
+      cancel: MaterialButton(
+        // CANCEL BUTTON
+        onPressed: () {
+          controller.addTaskController.clear();
+          Get.back();
+        },
+        child: Text(
+          'cancel',
+          style: TextStyle(color: const Color.fromARGB(255, 188, 121, 200)),
+        ),
       ),
     );
   }

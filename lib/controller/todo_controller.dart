@@ -30,6 +30,8 @@ class TodoController extends GetxController {
   Future updateTodo(Todo todo) async {
     await dao.updateTodo(todo);
     fetchTodo();
+    Get.back();
+    addTaskController.clear();
   }
 
   Future add() async {
